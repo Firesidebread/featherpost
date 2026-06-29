@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useFetch from "../hook/useFetch";
 import countries from "../data/countries";
 
-function NewsPanel({ country }) {
+function NewsPanel({ country, onClose }) {
   const countryData = countries[country];
   const weatherKey = import.meta.env.VITE_WEATHER_TOKEN;
   const newsKey = import.meta.env.VITE_NEWSAPI_TOKEN;
@@ -21,7 +21,7 @@ function NewsPanel({ country }) {
     : null;
   const { data: wbData } = useFetch(worldBankUrl);
   const population = wbData?.[1]?.[0]?.value
-    ? new Intl.NumberFormat().format(wbData[1][0].value)
+    ? new Intl.NumberFormat("en-US").format(wbData[1][0].value)
     : null;
 
   useEffect(() => {
@@ -72,6 +72,9 @@ function NewsPanel({ country }) {
           <h2>{countryData.name}</h2>
           <span className="panel-region">{countryData.region}</span>
         </div>
+        <button className="panel-close" onClick={onClose}>
+          ✕
+        </button>
       </div>
 
       {/* stats */}

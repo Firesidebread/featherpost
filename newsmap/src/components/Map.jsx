@@ -1,5 +1,5 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { geoNaturalEarth1, geoPath, geoBounds } from "d3-geo";
+import { geoMercator, geoPath, geoBounds } from "d3-geo";
 import { feature } from "topojson-client";
 
 const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
@@ -12,12 +12,12 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
   const geoFeaturesRef = useRef([]);
   const panelOpenRef = useRef(false);
 
-  const width = 1200;
-  const height = 600;
+  const width = 1600;
+  const height = 900;
 
-  const projection = geoNaturalEarth1()
-    .scale(190)
-    .translate([width / 2, height / 2]);
+  const projection = geoMercator()
+    .scale(220)
+    .translate([width / 2, height / 2 + 100]);
 
   const pathGenerator = geoPath().projection(projection);
 
@@ -234,7 +234,7 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
       style={{
         width: "100%",
         height: "100%",
-        background: "#0d1117",
+        background: "#0a0f1e",
         cursor: "grab",
         display: "block",
       }}

@@ -106,7 +106,10 @@ function App() {
       >
         <div className="panel-resize-handle" onMouseDown={handleResizeStart} />
         <div className="panel-content">
-          <NewsPanel country={selectedCountry} />
+          <NewsPanel
+            country={selectedCountry}
+            onClose={() => setPanelOpen(false)}
+          />
         </div>
       </div>
     </div>
