@@ -1,0 +1,354 @@
+html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .map-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .map-container svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  /* SEARCH BAR */
+  .search-bar {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    padding: 10px 20px;
+    width: 380px;
+  }
+  
+  .search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #e6edf3;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .search-bar input::placeholder {
+    color: rgba(230, 237, 243, 0.4);
+  }
+  
+  .search-bar .search-icon {
+    font-size: 16px;
+  }
+  
+  /* NEWS PANEL */
+  .news-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    z-index: 10;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(16px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: row;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .news-panel.open {
+    transform: translateX(0);
+  }
+  
+  /* RESIZE HANDLE */
+  .panel-resize-handle {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    cursor: ew-resize;
+    background: transparent;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    float: left;
+  }
+  
+  .panel-resize-handle:hover {
+    background: rgba(0, 212, 255, 0.3);
+  }
+  
+  /* PANEL EMPTY STATE */
+  .panel-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 12px;
+    color: rgba(230, 237, 243, 0.3);
+    font-size: 14px;
+  }
+  
+  .panel-empty span {
+    font-size: 48px;
+  }
+  
+  /* PANEL HEADER */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  
+  .panel-flag {
+    font-size: 48px;
+    line-height: 1;
+  }
+  
+  .panel-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e6edf3;
+  }
+  
+  .panel-region {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.4);
+    margin-top: 4px;
+    display: block;
+  }
+  
+  /* STATS */
+  .panel-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    background: rgba(13, 17, 23, 0.95);
+  }
+  
+  .stat-label {
+    font-size: 11px;
+    color: rgba(230, 237, 243, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+  }
+  
+  /* WEATHER */
+  .panel-weather {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 212, 255, 0.04);
+  }
+  
+  .panel-weather img {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .panel-weather .weather-temp {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00d4ff;
+    display: block;
+  }
+  
+  .panel-weather .weather-city {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.5);
+    display: block;
+  }
+  
+  .panel-weather .weather-desc {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.5);
+    text-transform: capitalize;
+    display: block;
+  }
+  
+  /* NEWS */
+  .panel-news-header {
+    padding: 16px 20px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(230, 237, 243, 0.4);
+  }
+  
+  .panel-loading {
+    padding: 20px;
+    font-size: 13px;
+    color: rgba(230, 237, 243, 0.4);
+  }
+  
+  .news-article {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .news-article:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+  
+  .news-article.expanded {
+    background: rgba(0, 212, 255, 0.04);
+    border-color: rgba(0, 212, 255, 0.15);
+  }
+  
+  .news-article img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .news-content h3 {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #e6edf3;
+  }
+  
+  .news-content p {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.5);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+  
+  .news-content span {
+    font-size: 11px;
+    color: #00d4ff;
+    margin-top: 6px;
+    display: block;
+  }
+  
+  /* ARTICLE ACTIONS */
+  .article-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .read-more {
+    font-size: 12px;
+    color: #00d4ff;
+    text-decoration: none;
+  }
+  
+  .read-more:hover {
+    text-decoration: underline;
+  }
+  
+  .collapse-btn {
+    font-size: 12px;
+    color: rgba(230, 237, 243, 0.4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .collapse-btn:hover {
+    color: #e6edf3;
+  }
+  .panel-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .search-bar {
+    position: relative;
+  }
+  
+  .search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: rgba(13, 17, 23, 0.98);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 20;
+  }
+  
+  .search-result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s ease;
+  }
+  
+  .search-result:hover {
+    background: rgba(0, 212, 255, 0.08);
+  }
