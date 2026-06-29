@@ -42,9 +42,11 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
     const panelOffset = panelOpenRef.current
       ? (360 / window.innerWidth) * width
       : 0;
+
     const maxX = (scale - 1) * (width / 2) + panelOffset;
-    const minX = -((scale - 1) * (width / 2));
+    const minX = -((scale - 1) * width); // allow panning much further right
     const maxY = (scale - 1) * (height / 2);
+
     transform.current.x = Math.min(maxX, Math.max(minX, transform.current.x));
     transform.current.y = Math.min(maxY, Math.max(-maxY, transform.current.y));
   };
