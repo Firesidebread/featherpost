@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Map from "./components/Map";
 import NewsPanel from "./components/NewsPanel";
 import countries from "./data/countries";
@@ -10,10 +10,12 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [panelOpen, setPanelOpen] = useState(false);
   const [panelWidth, setPanelWidth] = useState(360);
+  const [launched, setLaunched] = useState(false);
   const isResizing = useRef(false);
   const mapRef = useRef(null);
 
   const handleCountryClick = (id) => {
+    setLaunched(true);
     setSelectedCountry(id);
     setPanelOpen(true);
     setSearchQuery("");
@@ -21,6 +23,7 @@ function App() {
   };
 
   const handleSearch = (e) => {
+    setLaunched(true);
     const query = e.target.value;
     setSearchQuery(query);
 
@@ -65,31 +68,64 @@ function App() {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
   };
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashFading, setSplashFading] = useState(false);
+
+  // auto dismiss after 2.5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSplashFading(true);
+      setTimeout(() => setShowSplash(false), 600);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="app">
-      <div className="search-bar">
-        <span className="search-icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search a country..."
-          value={searchQuery}
-          onChange={handleSearch}
-        />
-        {searchResults.length > 0 && (
-          <div className="search-dropdown">
-            {searchResults.map(([id, country]) => (
-              <div
-                key={id}
-                className="search-result"
-                onClick={() => handleSearchSelect([id, country])}
-              >
-                <span>{country.flag}</span>
-                <span>{country.name}</span>
-              </div>
-            ))}
-          </div>
-        )}
+      {showSplash && (
+        <div
+          className={`splash ${splashFading ? "fading" : ""}`}
+          onClick={() => {
+            setSplashFading(true);
+            setTimeout(() => setShowSplash(false), 600);
+          }}
+        >
+          <img src="/logo.png" alt="Featherpost" />
+          <span>featherpost</span>
+        </div>
+      )}
+      {/* intro logo */}
+      <div className={`logo-intro ${launched ? "launched" : ""}`}>
+        <img src="/logo.png" alt="Featherpost" />
+        <span>featherpost</span>
+      </div>
+
+      {/* header */}
+      <div className={`app-header ${launched ? "launched" : ""}`}>
+        <img src="/logo.png" alt="Featherpost" className="header-logo" />
+        <div className="search-bar">
+          <span className="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search a country..."
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+          {searchResults.length > 0 && (
+            <div className="search-dropdown">
+              {searchResults.map(([id, country]) => (
+                <div
+                  key={id}
+                  className="search-result"
+                  onClick={() => handleSearchSelect([id, country])}
+                >
+                  <span>{country.flag}</span>
+                  <span>{country.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="map-container">

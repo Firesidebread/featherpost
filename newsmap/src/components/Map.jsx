@@ -11,6 +11,7 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
   const hasDragged = useRef(false);
   const geoFeaturesRef = useRef([]);
   const panelOpenRef = useRef(false);
+  const selectedPathRef = useRef(null);
 
   const width = 1600;
   const height = 900;
@@ -108,8 +109,8 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
             "path"
           );
           path.setAttribute("d", pathGenerator(geo));
-          path.setAttribute("fill", "#2d3561");
-          path.setAttribute("stroke", "#0d1117");
+          path.setAttribute("fill", "#0056B3");
+          path.setAttribute("stroke", "#1D2D44");
           path.setAttribute("stroke-width", "0.5");
           path.style.cursor = "pointer";
           path.dataset.id = parseInt(geo.id);
@@ -182,16 +183,16 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
     let lastHovered = null;
     const handleMouseOver = (e) => {
       const path = e.target.closest("path");
-      if (!path) return;
-      if (lastHovered) lastHovered.style.fill = "#2d3561";
-      path.style.fill = "#e94560";
+      if (!path || path === selectedPathRef.current) return;
+      if (lastHovered) lastHovered.style.fill = "#0056B3";
+      path.style.fill = "#4A90D9";
       lastHovered = path;
     };
 
     const handleMouseOut = (e) => {
       const path = e.target.closest("path");
-      if (!path) return;
-      path.style.fill = "#2d3561";
+      if (!path || path === selectedPathRef.current) return;
+      path.style.fill = "#0056B3";
       lastHovered = null;
     };
 
@@ -199,6 +200,13 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
       if (hasDragged.current) return;
       const path = e.target.closest("path");
       if (!path) return;
+
+      if (selectedPathRef.current && selectedPathRef.current !== path) {
+        selectedPathRef.current.style.fill = "#0056B3";
+      }
+
+      selectedPathRef.current = path;
+
       const id = path.dataset.id;
       onCountryClick(id);
 
@@ -206,6 +214,13 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
         (f) => String(f.id) === String(id)
       );
       if (geoFeature) zoomToCountry(geoFeature);
+
+      // set after animation completes
+      setTimeout(() => {
+        if (selectedPathRef.current) {
+          selectedPathRef.current.style.fill = "#FFB703";
+        }
+      }, 650);
     };
 
     svg.addEventListener("wheel", handleWheel, { passive: false });
@@ -236,7 +251,7 @@ const Map = forwardRef(function Map({ onCountryClick, panelOpen }, ref) {
       style={{
         width: "100%",
         height: "100%",
-        background: "#0a0f1e",
+        background: "#0a1628",
         cursor: "grab",
         display: "block",
       }}
