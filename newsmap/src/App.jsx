@@ -13,10 +13,15 @@ function App() {
   const [launched, setLaunched] = useState(false);
   const isResizing = useRef(false);
   const mapRef = useRef(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+
+  const handleCityClick = (cityName) => {
+    setSelectedCity(cityName);
+  };
 
   const handleCountryClick = (id) => {
-    setLaunched(true);
     setSelectedCountry(id);
+    setSelectedCity(null); // reset city on country change
     setPanelOpen(true);
     setSearchQuery("");
     setSearchResults([]);
@@ -91,20 +96,15 @@ function App() {
           }}
         >
           <img src="/logo.png" alt="Featherpost" />
-          <span>featherpost</span>
         </div>
       )}
       {/* intro logo */}
-      <div className={`logo-intro ${launched ? "launched" : ""}`}>
-        <img src="/logo.png" alt="Featherpost" />
-        <span>featherpost</span>
-      </div>
 
       {/* header */}
-      <div className={`app-header ${launched ? "launched" : ""}`}>
+      <div className="app-header">
         <img src="/logo.png" alt="Featherpost" className="header-logo" />
         <div className="search-bar">
-          <span className="search-icon">🔍</span>
+          <span className="search-icon">⌕</span>
           <input
             type="text"
             placeholder="Search a country..."
@@ -132,6 +132,7 @@ function App() {
         <Map
           ref={mapRef}
           onCountryClick={handleCountryClick}
+          onCityClick={handleCityClick}
           panelOpen={panelOpen}
         />
       </div>
@@ -144,6 +145,7 @@ function App() {
         <div className="panel-content">
           <NewsPanel
             country={selectedCountry}
+            city={selectedCity}
             onClose={() => setPanelOpen(false)}
           />
         </div>

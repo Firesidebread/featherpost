@@ -2,20 +2,17 @@ import { useState, useEffect } from "react";
 import useFetch from "../hook/useFetch";
 import countries from "../data/countries";
 
-function NewsPanel({ country, onClose }) {
+function NewsPanel({ country, city, onClose }) {
   const countryData = countries[country];
-  const weatherKey = import.meta.env.VITE_WEATHER_TOKEN;
-  const newsKey = import.meta.env.VITE_NEWSAPI_TOKEN;
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const locationName = city || countryData?.capital;
 
   const [news, setNews] = useState([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
 
-  const weatherUrl = countryData?.capital
-    ? `https://api.openweathermap.org/data/2.5/weather?q=${countryData.capital}&appid=${weatherKey}&units=metric`
-    : null;
-
-  const { data: weatherData } = useFetch(weatherUrl);
+  // world bank for population
   const worldBankUrl = countryData
     ? `https://api.worldbank.org/v2/country/${countryData.code.toUpperCase()}/indicator/SP.POP.TOTL?format=json&mrv=1`
     : null;
@@ -24,35 +21,34 @@ function NewsPanel({ country, onClose }) {
     ? new Intl.NumberFormat("en-US").format(wbData[1][0].value)
     : null;
 
+  // fetch weather
+  useEffect(() => {
+    if (!locationName) return;
+    setWeatherData(null);
+    fetch(`${apiUrl}/api/weather?city=${encodeURIComponent(locationName)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.weather) setWeatherData(data);
+      })
+      .catch(() => {});
+  }, [locationName]);
+
+  // fetch news
   useEffect(() => {
     setNews([]);
-    setExpandedIndex(null);
     if (!countryData) return;
     setNewsLoading(true);
 
-    fetch("https://newsapi.ai/api/v1/article/getArticles", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "getArticles",
-        keyword: countryData.name,
-        articlesCount: 5,
-        articlesSortBy: "date",
-        articlesSortByAsc: false,
-        articlesArticleBodyLen: 500,
-        resultType: "articles",
-        lang: "eng",
-        dataType: ["news"],
-        apiKey: newsKey,
-      }),
-    })
+    const searchTerm = city || countryData.name;
+
+    fetch(`${apiUrl}/api/news?q=${encodeURIComponent(searchTerm)}`)
       .then((res) => res.json())
       .then((data) => {
-        setNews(data?.articles?.results || []);
+        setNews(data?.articles || []);
         setNewsLoading(false);
       })
       .catch(() => setNewsLoading(false));
-  }, [country]);
+  }, [country, city]);
 
   if (!country || !countryData) {
     return (
@@ -110,7 +106,7 @@ function NewsPanel({ country, onClose }) {
             <span className="weather-temp">
               {Math.round(weatherData.main.temp)}°C
             </span>
-            <span className="weather-city">{countryData.capital}</span>
+            <span className="weather-city">{locationName}</span>
             <span className="weather-desc">
               {weatherData.weather[0].description}
             </span>
@@ -138,12 +134,14 @@ function NewsPanel({ country, onClose }) {
             }
           }}
         >
-          {article.image && <img src={article.image} alt={article.title} />}
+          {article.urlToImage && (
+            <img src={article.urlToImage} alt={article.title} />
+          )}
           <div className="news-content">
             <h3>{article.title}</h3>
             {expandedIndex === index ? (
               <>
-                <p>{article.body}</p>
+                <p>{article.description}</p>
                 <div className="article-actions">
                   <a
                     href={article.url}
@@ -166,9 +164,9 @@ function NewsPanel({ country, onClose }) {
                 </div>
               </>
             ) : (
-              <p>{article.body?.slice(0, 120)}...</p>
+              <p>{article.description?.slice(0, 120)}...</p>
             )}
-            <span>{new Date(article.dateTimePub).toLocaleDateString()}</span>
+            <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
           </div>
         </a>
       ))}
