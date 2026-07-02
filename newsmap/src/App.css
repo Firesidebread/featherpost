@@ -28,11 +28,13 @@ body {
   background: #D4D0C8;
 }
 
+
 .map-container {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 52px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .map-container svg {
@@ -47,15 +49,15 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #1A1A1A;
+  background: rgba(242, 236, 217, 0.1);
+  border: 1px solid rgba(242, 236, 217, 0.3);
   border-radius: 4px;
-  padding: 10px 18px;
-  width: 260px;
-  transition: width 0.2s ease;
+  padding: 6px 14px;
+  width: 220px;
 }
 
 .search-bar:focus-within {
-  width: 320px;
+  width: 260px;
 }
 
 .search-bar input {
@@ -80,46 +82,64 @@ body {
 
 
 /* APP HEADER */
-.app-header {
+/* MASTHEAD BAR */
+.masthead-bar {
   position: absolute;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
   z-index: 10;
+  background: #1A1108;
+  border-top: 3px solid #F2ECD9;
+  border-bottom: 3px solid #F2ECD9;
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-.masthead {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  background: #F5F2EB;
-  padding: 12px 0 8px;
-  border-bottom: 2px solid #1A1A1A;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 
-.masthead-rule {
-  width: 100%;
-  height: 2px;
-  background: #1A1A1A;
-  margin: 4px 0;
+.masthead-bar::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #F2ECD9;
 }
 
-.masthead-center {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 4px 0;
+.masthead-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #F2ECD9;
 }
 
 .masthead-title {
   font-family: 'Playfair Display', serif;
   font-weight: 900;
-  font-size: 24px;
-  letter-spacing: 6px;
-  color: #1A1A1A;
+  font-size: 28px;
+  letter-spacing: 10px;
+  color: #F2ECD9;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.masthead-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.masthead-right {
+  width: 200px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /*.app-header.launched {
@@ -187,9 +207,9 @@ body {
 /* NEWS PANEL */
 .news-panel {
   position: absolute;
-  top: 0;
+  top: 52px;
   right: 0;
-  height: 100vh;
+  height: calc(100vh - 52px);
   z-index: 10;
   background: #F5F2EB;
   border-left: 1px solid #C8C4BC;

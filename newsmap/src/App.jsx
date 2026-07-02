@@ -98,33 +98,37 @@ function App() {
           <img src="/logo.png" alt="Featherpost" />
         </div>
       )}
-      {/* intro logo */}
 
-      {/* header */}
-      <div className="app-header">
-        <img src="/logo.png" alt="Featherpost" className="header-logo" />
-        <div className="search-bar">
-          <span className="search-icon">⌕</span>
-          <input
-            type="text"
-            placeholder="Search a country..."
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-          {searchResults.length > 0 && (
-            <div className="search-dropdown">
-              {searchResults.map(([id, country]) => (
-                <div
-                  key={id}
-                  className="search-result"
-                  onClick={() => handleSearchSelect([id, country])}
-                >
-                  <span>{country.flag}</span>
-                  <span>{country.name}</span>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* masthead bar */}
+      <div className="masthead-bar">
+        <div className="masthead-left">
+          <img src="/logo.png" alt="Featherpost" className="masthead-logo" />
+        </div>
+        <div className="masthead-title">FEATHERPOST</div>
+        <div className="masthead-right">
+          <div className="search-bar">
+            <span className="search-icon">⌕</span>
+            <input
+              type="text"
+              placeholder="Search a country..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+            {searchResults.length > 0 && (
+              <div className="search-dropdown">
+                {searchResults.map(([id, country]) => (
+                  <div
+                    key={id}
+                    className="search-result"
+                    onClick={() => handleSearchSelect([id, country])}
+                  >
+                    <span>{country.flag}</span>
+                    <span>{country.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -153,5 +157,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
